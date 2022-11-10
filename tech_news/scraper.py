@@ -7,7 +7,6 @@ from parsel import Selector
 def fetch(
     url: str, wait: int = 3, header: dict = {"User-agent": "Fake user-agent"}
 ) -> str:
-    """Seu código deve vir aqui"""
     time.sleep(1)
     try:
         response = requests.get(url, timeout=wait, headers=header)
@@ -20,15 +19,16 @@ def fetch(
 
 # Requisito 2
 def scrape_novidades(html_content: str) -> list:
-    """Seu código deve vir aqui"""
     selector = Selector(text=html_content)
     news_url = selector.css("h2.entry-title a::attr(href)").getall()
     return news_url
 
 
 # Requisito 3
-def scrape_next_page_link(html_content):
-    """Seu código deve vir aqui"""
+def scrape_next_page_link(html_content: str) -> str:
+    selector = Selector(text=html_content)
+    next_url = selector.css("a.next.page-numbers::attr(href)").get()
+    return next_url
 
 
 # Requisito 4
@@ -42,6 +42,15 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    response = fetch("https://blog.betrybe.com/")
-    for new in scrape_novidades(response):
-        print(new)
+    # response = fetch("https://blog.betrybe.com/")
+    # for new in scrape_novidades(response):
+    #     print(new)
+    news = []
+    url = "https://blog.betrybe.com/"
+    while url:
+        response = fetch(url)
+        news.extend(response)
+        url = scrape_next_page_link(response)
+        print(url)
+
+    print(len(news))
