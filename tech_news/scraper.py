@@ -1,15 +1,16 @@
 # Requisito 1
 import requests
 import time
+from parsel import Selector
 
 
-def fetch(url):
+def fetch(
+    url: str, wait: int = 3, header: dict = {"User-agent": "Fake user-agent"}
+) -> str:
     """Seu código deve vir aqui"""
     time.sleep(1)
     try:
-        response = requests.get(
-            url, timeout=3, headers={"User-agent": "Fake user-agent"}
-        )
+        response = requests.get(url, timeout=wait, headers=header)
         response.raise_for_status()
     except requests.exceptions.RequestException:
         return None
@@ -18,8 +19,11 @@ def fetch(url):
 
 
 # Requisito 2
-def scrape_novidades(html_content):
+def scrape_novidades(html_content: str) -> list:
     """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    news_url = selector.css("h2.entry-title a::attr(href)").getall()
+    return news_url
 
 
 # Requisito 3
@@ -37,12 +41,7 @@ def get_tech_news(amount):
     """Seu código deve vir aqui"""
 
 
-# if __name__ == "__main__":
-#     for ind in range(1):
-#         print(ind)
-#         response1 = fetch("https://blog.betrybe.com/")
-#         print(f"1 - {response1}")
-#         response2 = fetch("http://httpbin.org/delay/2")
-#         print(f"2 - {response2}")
-#         response3 = fetch("http://httpbin.org/status/404")
-#         print(f"3 - {response3}")
+if __name__ == "__main__":
+    response = fetch("https://blog.betrybe.com/")
+    for new in scrape_novidades(response):
+        print(new)
