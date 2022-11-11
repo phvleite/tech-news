@@ -49,8 +49,6 @@ if __name__ == "__main__":
     url = "https://blog.betrybe.com/"
     while url:
         response = fetch(url)
-        news.extend(response)
+        news.extend(scrape_novidades(response))
         url = scrape_next_page_link(response)
         print(url)
-
-    print(len(news))
