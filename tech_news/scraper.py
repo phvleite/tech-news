@@ -1,6 +1,7 @@
 # Requisito 1
-import requests
 import time
+
+import requests
 from parsel import Selector
 
 
@@ -34,6 +35,14 @@ def scrape_next_page_link(html_content: str) -> str:
 # Requisito 4
 def scrape_noticia(html_content):
     """Seu código deve vir aqui"""
+    selector = Selector(text=html_content)
+    url = selector.css("head link[rel*='canonical']::attr(href)").get()
+    title = selector.css("h1.entry-title::text").get()
+    timestamp = selector.css("li.meta-date::text").get()
+    if len(timestamp) == 0:
+        timestamp = selector.css("p.post-modified-info::text").get()[:10]
+    writer = selector.css("a.url.fn.n::text").get()
+    print(url, title, timestamp, writer, sep=",")
 
 
 # Requisito 5
@@ -45,10 +54,28 @@ if __name__ == "__main__":
     # response = fetch("https://blog.betrybe.com/")
     # for new in scrape_novidades(response):
     #     print(new)
-    news = []
-    url = "https://blog.betrybe.com/"
-    while url:
-        response = fetch(url)
-        news.extend(scrape_novidades(response))
-        url = scrape_next_page_link(response)
-        print(url)
+    # news = []
+    # url = "https://blog.betrybe.com/"
+    # while url:
+    #     response = fetch(url)
+    #     news.extend(scrape_novidades(response))
+    #     url = scrape_next_page_link(response)
+    #     print(url)
+    URL_BASE = "https://blog.betrybe.com/"
+    URL_EXTENSAO = "framework-de-programacao/frameworks-nodejs/"
+    response = fetch(URL_BASE + URL_EXTENSAO)
+    selector = Selector(text=response)
+    url_current = selector.css("head link[rel*='canonical']::attr(href)").get()
+    title = selector.css("h1.entry-title::text").get()
+    timestamp = selector.css("li.meta-date::text").get()
+    if len(timestamp) == 0:
+        timestamp = selector.css("p.post-modified-info::text").get()[:10]
+    writer = selector.css("a.url.fn.n::text").get()
+    print(
+        f"""
+url - {url_current}
+título - {title}
+data - {timestamp}
+escritor - {writer}
+"""
+    )
