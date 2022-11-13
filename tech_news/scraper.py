@@ -49,7 +49,9 @@ def scrape_noticia(html_content):
         comments_count = 0
     else:
         comments_count = int(comments_count[0])
-    print(url, title, timestamp, writer, comments_count, sep=",")
+    category = selector.css("a.category-style > span.label::text").get()
+
+    print(url, title, timestamp, writer, comments_count, category, sep=",")
 
 
 # Requisito 5
@@ -70,7 +72,7 @@ if __name__ == "__main__":
     #     print(url)
     URL_BASE = "https://blog.betrybe.com/"
     URL_EXTENSAO = (
-        "tecnologia/informatica-basica/"
+        "carreira/tudo-sobre-tecnologia-da-informacao/"
     )
     URL_EXT = ""
     URL_EXTENSAO = URL_EXTENSAO + URL_EXT
@@ -89,6 +91,8 @@ if __name__ == "__main__":
         comments_count = 0
     else:
         comments_count = int(comments_count[0])
+    category = selector.css("a.category-style > span.label::text").get()
+
     print(
         f"""
 url - {url_current}
@@ -96,5 +100,6 @@ título - {title}
 data - {timestamp}
 escritor - {writer}
 comentários - {comments_count}
+categoria - {category}
 """
     )
