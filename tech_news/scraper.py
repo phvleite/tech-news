@@ -1,6 +1,6 @@
 # Requisito 1
 import time
-
+import re
 import requests
 from parsel import Selector
 
@@ -36,7 +36,7 @@ def scrape_next_page_link(html_content: str) -> str:
 def scrape_noticia(html_content):
     """Seu código deve vir aqui"""
     selector = Selector(text=html_content)
-    url = selector.css("head link[rel*='canonical']::attr(href)").get()
+    url = selector.css("head link[rel='canonical']::attr(href)").get()
     title = selector.css("h1.entry-title::text").get()
     title = title.split(" ")
     title = " ".join(title)
@@ -75,13 +75,13 @@ if __name__ == "__main__":
     #     print(url)
     URL_BASE = "https://blog.betrybe.com/"
     URL_EXTENSAO = (
-        "noticias/indicadores-de-esg-funcionam-em-somente-algumas-empresas/"
+        "tecnologia/sgbd-tudo-sobre/"
     )
     URL_EXT = ""
     URL_EXTENSAO = URL_EXTENSAO + URL_EXT
     response = fetch(URL_BASE + URL_EXTENSAO)
     selector = Selector(text=response)
-    url_current = selector.css("head link[rel*='canonical']::attr(href)").get()
+    url_current = selector.css("head link[rel='canonical']::attr(href)").get()
     title = selector.css("h1.entry-title::text").get()
     title = title.split(" ")
     title = " ".join(title)
@@ -96,7 +96,13 @@ if __name__ == "__main__":
         comments_count = int(comments_count[0])
     category = selector.css("a.category-style > span.label::text").get()
     tags = selector.css("section.post-tags > ul > li > a::text").getall()
-
+    # summary = selector.css("div.entry-content p::text").get()
+    summary = selector.css("div.entry-content > p").get()
+    # summary = selector.xpath("//p[*]").get()
+    my_regex = r"<a .*\">|</a>|<p>|</p>|<strong>|</strong>"
+    summary_re = re.sub(my_regex, "", summary)
+    # summary = summary_re.split(" ")
+    # summary = " ".join(summary)
     print(
         f"""
 url - {url_current}
@@ -106,5 +112,6 @@ escritor - {writer}
 comentários - {comments_count}
 tags: {tags}
 categoria - {category}
+sumário - {summary}
 """
     )
