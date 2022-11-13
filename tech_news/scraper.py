@@ -1,6 +1,5 @@
 # Requisito 1
 import time
-import re
 import requests
 from parsel import Selector
 
@@ -34,27 +33,46 @@ def scrape_next_page_link(html_content: str) -> str:
 
 # Requisito 4
 def scrape_noticia(html_content):
-    """Seu código deve vir aqui"""
     selector = Selector(text=html_content)
+
+    news = {}
+
     url = selector.css("head link[rel='canonical']::attr(href)").get()
+    news["url"] = url
+
     title = selector.css("h1.entry-title::text").get()
-    title = title.split(" ")
-    title = " ".join(title)
+    title = title.strip()
+    news["title"] = title
+
     timestamp = selector.css("li.meta-date::text").get()
     if len(timestamp) == 0:
         timestamp = selector.css("p.post-modified-info::text").get()[:10]
+    news["timestamp"] = timestamp
+
     writer = selector.css("a.url.fn.n::text").get()
+    news["writer"] = writer
+
     comments_count = selector.css("h5.title-block::text").re(r"\d")
     if len(comments_count) == 0:
         comments_count = 0
     else:
         comments_count = int(comments_count[0])
-    tags = selector.css("section.post-tags > ul > li > a::text").getall()
-    category = selector.css("a.category-style > span.label::text").get()
+    news["comments_count"] = comments_count
 
-    print(
-        url, title, timestamp, writer, comments_count, tags, category, sep=","
-    )
+    summary = selector.css(
+        "div.entry-content > p:nth-of-type(1) *::text"
+    ).getall()
+    summary = "".join(summary)
+    summary = summary.strip()
+    news["summary"] = summary
+
+    tags = selector.css("section.post-tags > ul > li > a::text").getall()
+    news["tags"] = tags
+
+    category = selector.css("a.category-style > span.label::text").get()
+    news["category"] = category
+
+    return news
 
 
 # Requisito 5
@@ -63,55 +81,7 @@ def get_tech_news(amount):
 
 
 if __name__ == "__main__":
-    # response = fetch("https://blog.betrybe.com/")
-    # for new in scrape_novidades(response):
-    #     print(new)
-    # news = []
-    # url = "https://blog.betrybe.com/"
-    # while url:
-    #     response = fetch(url)
-    #     news.extend(scrape_novidades(response))
-    #     url = scrape_next_page_link(response)
-    #     print(url)
     URL_BASE = "https://blog.betrybe.com/"
-    URL_EXTENSAO = (
-        "tecnologia/sgbd-tudo-sobre/"
-    )
-    URL_EXT = ""
-    URL_EXTENSAO = URL_EXTENSAO + URL_EXT
+    URL_EXTENSAO = "carreira/fazer-curriculo-no-word-em-pdf/"
     response = fetch(URL_BASE + URL_EXTENSAO)
-    selector = Selector(text=response)
-    url_current = selector.css("head link[rel='canonical']::attr(href)").get()
-    title = selector.css("h1.entry-title::text").get()
-    title = title.split(" ")
-    title = " ".join(title)
-    timestamp = selector.css("li.meta-date::text").get()
-    if len(timestamp) == 0:
-        timestamp = selector.css("p.post-modified-info::text").get()[:10]
-    writer = selector.css("a.url.fn.n::text").get()
-    comments_count = selector.css("h5.title-block::text").re(r"\d")
-    if len(comments_count) == 0:
-        comments_count = 0
-    else:
-        comments_count = int(comments_count[0])
-    category = selector.css("a.category-style > span.label::text").get()
-    tags = selector.css("section.post-tags > ul > li > a::text").getall()
-    # summary = selector.css("div.entry-content p::text").get()
-    summary = selector.css("div.entry-content > p").get()
-    # summary = selector.xpath("//p[*]").get()
-    my_regex = r"<a .*\">|</a>|<p>|</p>|<strong>|</strong>"
-    summary_re = re.sub(my_regex, "", summary)
-    # summary = summary_re.split(" ")
-    # summary = " ".join(summary)
-    print(
-        f"""
-url - {url_current}
-título - {title}
-data - {timestamp}
-escritor - {writer}
-comentários - {comments_count}
-tags: {tags}
-categoria - {category}
-sumário - {summary}
-"""
-    )
+    print(scrape_noticia(response))
