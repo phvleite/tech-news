@@ -2,6 +2,7 @@
 import time
 import requests
 from parsel import Selector
+from tech_news.database import create_news, find_news
 
 
 def fetch(
@@ -78,10 +79,33 @@ def scrape_noticia(html_content):
 # Requisito 5
 def get_tech_news(amount):
     """Seu código deve vir aqui"""
+    list_news = []
+    url_news = []
+    URL = "https://blog.betrybe.com"
+    
+    while len(url_news) < amount:
+        page_html = fetch(URL)
+        url_news.extend(scrape_novidades(page_html))
+        if len(url_news) < amount:
+            URL = scrape_next_page_link(page_html)
+
+    for ind in range(amount):
+        page_html_new = fetch(url_news[ind])
+        new = scrape_noticia(page_html_new)
+        list_news.append(new)
+
+    create_news(list_news)
+    db_news = find_news()
+
+    return db_news        
 
 
 if __name__ == "__main__":
-    URL_BASE = "https://blog.betrybe.com/"
-    URL_EXTENSAO = "carreira/fazer-curriculo-no-word-em-pdf/"
-    response = fetch(URL_BASE + URL_EXTENSAO)
-    print(scrape_noticia(response))
+    URL_BASE = "https://blog.betrybe.com"
+    URL_EXTENSAO = "/tecnologia/informatica-basica/"
+    # URL_EXTENSAO_PLUS = ""
+    # response = fetch(URL_BASE + URL_EXTENSAO)
+    # print(scrape_noticia(response))
+    db = get_tech_news(1)
+    print(len(db))
+    print(db)
