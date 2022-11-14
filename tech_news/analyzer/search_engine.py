@@ -1,4 +1,5 @@
-from tech_news.database import search_news, find_news
+from tech_news.database import search_news
+
 
 # Requisito 6
 def search_by_title(title):
@@ -9,6 +10,7 @@ def search_by_title(title):
     for new in result:
         news_result.append((new["title"], new["url"]))
     return news_result
+
 
 # Requisito 7
 def search_by_date(date):

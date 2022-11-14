@@ -82,7 +82,7 @@ def get_tech_news(amount):
     list_news = []
     url_news = []
     URL = "https://blog.betrybe.com"
-    
+
     while len(url_news) < amount:
         page_html = fetch(URL)
         url_news.extend(scrape_novidades(page_html))
@@ -96,7 +96,6 @@ def get_tech_news(amount):
 
     create_news(list_news)
     db_news = find_news()
-
     return db_news        
 
 
