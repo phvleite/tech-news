@@ -34,6 +34,13 @@ def search_by_date(date):
 # Requisito 8
 def search_by_tag(tag):
     """Seu código deve vir aqui"""
+    cap_tag = tag.capitalize()
+    query = {"tags": {"$all": [f"{cap_tag}"]}}
+    result = search_news(query)
+    news_result = []
+    for new in result:
+        news_result.append((new["title"], new["url"]))
+    return news_result
 
 
 # Requisito 9
@@ -45,7 +52,9 @@ if __name__ == "__main__":
     # news = search_by_title("gates")
     # for new in news:
     #     print(new)
-    news = search_by_date("2021-04-04")
-    news = search_by_date("2021-04-04")
+    # news = search_by_date("2021-04-04")
+    # for new in news:
+    #     print(new)
+    news = search_by_tag("tecnologia")
     for new in news:
         print(new)
