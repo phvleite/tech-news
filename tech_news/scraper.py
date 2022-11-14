@@ -105,6 +105,6 @@ if __name__ == "__main__":
     # URL_EXTENSAO_PLUS = ""
     # response = fetch(URL_BASE + URL_EXTENSAO)
     # print(scrape_noticia(response))
-    db = get_tech_news(1)
+    db = get_tech_news(100)
     print(len(db))
     print(db)
