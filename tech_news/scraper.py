@@ -96,7 +96,7 @@ def get_tech_news(amount):
 
     create_news(list_news)
     db_news = find_news()
-    return db_news        
+    return db_news
 
 
 if __name__ == "__main__":
