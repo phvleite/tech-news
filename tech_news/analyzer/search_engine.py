@@ -5,7 +5,6 @@ from tech_news.database import search_news
 
 # Requisito 6
 def search_by_title(title):
-    """Seu código deve vir aqui"""
     query = {"title": {"$regex": f"{title}", "$options": "i"}}
     result = search_news(query)
     news_result = []
@@ -16,7 +15,6 @@ def search_by_title(title):
 
 # Requisito 7
 def search_by_date(date):
-    """Seu código deve vir aqui"""
     news_result = []
     try:
         date_iso = datetime.date.fromisoformat(date)
@@ -33,7 +31,6 @@ def search_by_date(date):
 
 # Requisito 8
 def search_by_tag(tag):
-    """Seu código deve vir aqui"""
     cap_tag = tag.capitalize()
     query = {"tags": {"$all": [f"{cap_tag}"]}}
     result = search_news(query)
@@ -45,7 +42,12 @@ def search_by_tag(tag):
 
 # Requisito 9
 def search_by_category(category):
-    """Seu código deve vir aqui"""
+    query = {"category": {"$regex": f"{category}", "$options": "i"}}
+    result = search_news(query)
+    news_result = []
+    for new in result:
+        news_result.append((new["title"], new["url"]))
+    return news_result
 
 
 if __name__ == "__main__":
@@ -55,6 +57,9 @@ if __name__ == "__main__":
     # news = search_by_date("2021-04-04")
     # for new in news:
     #     print(new)
-    news = search_by_tag("tecnologia")
+    # news = search_by_tag("tecnologia")
+    # for new in news:
+    #     print(new)
+    news = search_by_category("ferramentas")
     for new in news:
         print(new)
