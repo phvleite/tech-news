@@ -89,8 +89,12 @@ def get_tech_news(amount: int) -> list:
     while len(url_news) < amount and URL:
         page_html = fetch(URL)
         url_news.extend(scrape_novidades(page_html))
+
         if len(url_news) < amount:
             URL = scrape_next_page_link(page_html)
+
+    if len(url_news) > amount:
+        del(url_news[amount:])
 
     for ind in range(len(url_news)):
         page_html_new = fetch(url_news[ind])
@@ -110,7 +114,7 @@ if __name__ == "__main__":
     # URL_EXTENSAO_PLUS = ""
     # response = fetch(URL_BASE + URL_EXTENSAO)
     # print(scrape_noticia(response))
-    # db = get_tech_news(756)
-    # db = find_news()
+    db = get_tech_news(553)
+    db = find_news()
     # print(len(db))
     # print(db)
