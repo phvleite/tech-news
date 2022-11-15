@@ -1,6 +1,7 @@
 # Requisito 1
 import time
 import requests
+import re
 from parsel import Selector
 from tech_news.database import create_news, find_news
 
@@ -33,7 +34,7 @@ def scrape_next_page_link(html_content: str) -> str:
 
 
 # Requisito 4
-def scrape_noticia(html_content):
+def scrape_noticia(html_content: str) -> object:
     selector = Selector(text=html_content)
 
     news = {}
@@ -46,9 +47,13 @@ def scrape_noticia(html_content):
     news["title"] = title
 
     timestamp = selector.css("li.meta-date::text").get()
-    if len(timestamp) == 0:
-        timestamp = selector.css("p.post-modified-info::text").get()[:10]
-    news["timestamp"] = timestamp
+    if timestamp:
+        if len(timestamp) == 0:
+            regex_data = r"([0-9]{2}/[0-9]{2}/[0-9]{4})"
+            timestamp = re.search(
+                regex_data, selector.css("p.post-modified-info::text").get()
+            )
+        news["timestamp"] = timestamp
 
     writer = selector.css("a.url.fn.n::text").get()
     news["writer"] = writer
@@ -77,19 +82,17 @@ def scrape_noticia(html_content):
 
 
 # Requisito 5
-def get_tech_news(amount):
-    """Seu código deve vir aqui"""
+def get_tech_news(amount: int) -> list:
     list_news = []
     url_news = []
     URL = "https://blog.betrybe.com"
-
-    while len(url_news) < amount:
+    while len(url_news) < amount and URL:
         page_html = fetch(URL)
         url_news.extend(scrape_novidades(page_html))
         if len(url_news) < amount:
             URL = scrape_next_page_link(page_html)
 
-    for ind in range(amount):
+    for ind in range(len(url_news)):
         page_html_new = fetch(url_news[ind])
         new = scrape_noticia(page_html_new)
         list_news.append(new)
@@ -101,10 +104,13 @@ def get_tech_news(amount):
 
 if __name__ == "__main__":
     URL_BASE = "https://blog.betrybe.com"
-    URL_EXTENSAO = "/tecnologia/informatica-basica/"
+    URL_EXTENSAO = (
+        "/bootstrap/"
+    )
     # URL_EXTENSAO_PLUS = ""
     # response = fetch(URL_BASE + URL_EXTENSAO)
     # print(scrape_noticia(response))
-    db = get_tech_news(100)
-    print(len(db))
-    print(db)
+    # db = get_tech_news(756)
+    # db = find_news()
+    # print(len(db))
+    # print(db)
