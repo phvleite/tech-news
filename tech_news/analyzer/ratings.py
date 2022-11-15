@@ -10,17 +10,12 @@ def top_5_news():
     new_result = multisort(
         result, (("comments_count", True), ("title", False))
     )
+    del(new_result[5:])
 
-    if len(new_result) > 5:
-        for ind in range(5):
-            news_top_5.append(
-                (new_result[ind]["title"], new_result[ind]["url"])
-            )
-    elif len(new_result) > 0:
-        for ind in range(len(new_result)):
-            news_top_5.append(
-                (new_result[ind]["title"], new_result[ind]["url"])
-            )
+    for ind in range(len(new_result)):
+        news_top_5.append(
+            (new_result[ind]["title"], new_result[ind]["url"])
+        )
 
     return news_top_5
 
@@ -32,6 +27,7 @@ def top_5_categories():
 
     categories = {}
     categories_top_5 = []
+    list_categories_top_5 = []
     result = search_news(query)
 
     for category in result:
@@ -48,7 +44,10 @@ def top_5_categories():
         categories_top_5, (("qtde", True), ("category", False))
     )
 
-    list_categories_top_5 = qtd_top_categories(order_list)
+    for category in order_list:
+        list_categories_top_5.append((category["category"]))
+
+    del(list_categories_top_5[5:])
 
     return list_categories_top_5
 
@@ -62,23 +61,11 @@ def multisort(xs, specs):
     return xs
 
 
-def qtd_top_categories(data):
-    list_categories_top_5 = []
-    count = 0
-    for category in data:
-        if count < 5:
-            list_categories_top_5.append((category["category"]))
-        count += 1
-
-    return list_categories_top_5
-
-
 if __name__ == "__main__":
-    # top_5 = top_5_news()
-    # for new in top_5:
-    #     print(new)
+    top_5 = top_5_news()
+    for new in top_5:
+        print(new)
     # result = top_5_categories()
     # print(result)
     # for category in result:
     #     print(category)
-    pass
