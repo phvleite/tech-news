@@ -60,6 +60,7 @@ if __name__ == "__main__":
     # news = search_by_tag("tecnologia")
     # for new in news:
     #     print(new)
-    news = search_by_category("ferramentas")
-    for new in news:
-        print(new)
+    # news = search_by_category("ferramentas")
+    # for new in news:
+    #     print(new)
+    pass
