@@ -49,28 +49,28 @@ def get_news_by_title():
     title = input("Digite o título:\n")
     result = search_by_title(title)
     for new in result:
-        print(new)
+        print(f"Notícia: {new[0]}\nURL....: {new[1]}\n")
 
 
 def get_news_by_date():
     date = input("Digite a data no formato aaaa-mm-dd:\n")
     result = search_by_date(date)
     for new in result:
-        print(new)
+        print(f"Notícia: {new[0]}\nURL....: {new[1]}\n")
 
 
 def get_news_by_tag():
     tag = input("Digite a tag:\n")
     result = search_by_tag(tag)
     for new in result:
-        print(new)
+        print(f"Notícia: {new[0]}\nURL....: {new[1]}\n")
 
 
 def get_news_by_category():
     category = input("Digite a categoria:\n")
     result = search_by_category(category)
     for new in result:
-        print(new)
+        print(f"Notícia: {new[0]}\nURL....: {new[1]}\n")
 
 
 def get_top_5_news():
