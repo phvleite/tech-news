@@ -22,7 +22,6 @@ def top_5_news():
 
 # Requisito 11
 def top_5_categories():
-    """Seu código deve vir aqui"""
     query = {}
 
     categories = {}
@@ -45,7 +44,7 @@ def top_5_categories():
     )
 
     for category in order_list:
-        list_categories_top_5.append((category["category"]))
+        list_categories_top_5.append(category["category"])
 
     del(list_categories_top_5[5:])
 
