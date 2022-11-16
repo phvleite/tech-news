@@ -31,13 +31,13 @@ def analyzer_menu():
     for ind, op in enumerate(MENU):
         print(f" {ind} - {op}")
 
-    select = ""
-    while select != "7":
-        select = (input("Digite sua opção:\n"))
-        if select in OPTIONS:
-            REQUESTS[select]()
-        elif select != "7":
-            print("Opção inválida", file=sys.stderr)
+    select = input("Digite sua opção:\n")
+    if select in OPTIONS:
+        REQUESTS[select]()
+    elif select != "7":
+        print("Opção inválida", file=sys.stderr)
+    elif select == "7":
+        print("Encerrando script\n")
 
 
 def get_news():
@@ -92,5 +92,5 @@ REQUESTS = {
     "3": get_news_by_tag,
     "4": get_news_by_category,
     "5": get_top_5_news,
-    "6": get_top_5_news_by_category
+    "6": get_top_5_news_by_category,
 }
