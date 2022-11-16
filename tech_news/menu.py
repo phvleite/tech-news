@@ -1,10 +1,16 @@
 from tech_news.analyzer.search_engine import (
-    # search_by_category,
-    # search_by_tag,
+    search_by_category,
+    search_by_tag,
     search_by_date,
     search_by_title,
 )
+from tech_news.analyzer.ratings import (
+    top_5_news,
+    top_5_categories,
+)
 from tech_news.scraper import get_tech_news
+import sys
+
 
 MENU = [
     "Popular o banco com notícias;",
@@ -16,6 +22,7 @@ MENU = [
     "Listar top 5 categorias;",
     "Sair.",
 ]
+OPTIONS = [str(n) for n in range(7)]
 
 
 # Requisito 12
@@ -25,35 +32,65 @@ def analyzer_menu():
         print(f" {ind} - {op}")
 
     select = ""
-    while select != 7:
-        select = int(input("Digite sua opção: "))
-        if 0 <= select < 7:
+    while select != "7":
+        select = (input("Digite sua opção:\n"))
+        if select in OPTIONS:
             REQUESTS[select]()
+        elif select != "7":
+            print("Opção inválida", file=sys.stderr)
 
 
 def get_news():
-    qtde = int(input("Digite quantas notícias serão buscadas: "))
+    qtde = int(input("Digite quantas notícias serão buscadas:\n"))
     get_tech_news(qtde)
 
 
 def get_news_by_title():
-    title = input("Digite o título: ")
+    title = input("Digite o título:\n")
     result = search_by_title(title)
-    print(result)
+    for new in result:
+        print(new)
 
 
 def get_news_by_date():
-    date = input("Digite a data no formato aaaa-mm-dd: ")
+    date = input("Digite a data no formato aaaa-mm-dd:\n")
     result = search_by_date(date)
-    print(result)
+    for new in result:
+        print(new)
+
+
+def get_news_by_tag():
+    tag = input("Digite a tag:\n")
+    result = search_by_tag(tag)
+    for new in result:
+        print(new)
+
+
+def get_news_by_category():
+    category = input("Digite a categoria:\n")
+    result = search_by_category(category)
+    for new in result:
+        print(new)
+
+
+def get_top_5_news():
+    result = top_5_news()
+    for new in result:
+        print(new)
+
+
+def get_top_5_news_by_category():
+    result = top_5_categories()
+    for new in result:
+        print(new)
 
 
 REQUESTS = {
-    0: get_news,
-    1: get_news_by_title,
-    2: get_news_by_date,
+    "0": get_news,
+    "1": get_news_by_title,
+    "2": get_news_by_date,
+    "3": get_news_by_tag,
+    "4": get_news_by_category,
+    "5": get_top_5_news,
+    "6": get_top_5_news_by_category
 }
-
-
-if __name__ == "__main__":
-    analyzer_menu()
