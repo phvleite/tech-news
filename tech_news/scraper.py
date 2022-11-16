@@ -3,7 +3,7 @@ import time
 import requests
 import re
 from parsel import Selector
-from tech_news.database import create_news, find_news
+from tech_news.database import create_news
 
 
 def fetch(
@@ -102,19 +102,4 @@ def get_tech_news(amount: int) -> list:
         list_news.append(new)
 
     create_news(list_news)
-    db_news = find_news()
-    return db_news
-
-
-if __name__ == "__main__":
-    URL_BASE = "https://blog.betrybe.com"
-    URL_EXTENSAO = (
-        "/bootstrap/"
-    )
-    # URL_EXTENSAO_PLUS = ""
-    # response = fetch(URL_BASE + URL_EXTENSAO)
-    # print(scrape_noticia(response))
-    db = get_tech_news(553)
-    db = find_news()
-    # print(len(db))
-    # print(db)
+    return list_news
