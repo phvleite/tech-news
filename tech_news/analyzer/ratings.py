@@ -39,11 +39,11 @@ def top_5_categories():
             {"category": chave, "qtde": categories[chave]}
         )
 
-    order_list = multisort(
+    categories_top_5 = multisort(
         categories_top_5, (("qtde", True), ("category", False))
     )
 
-    for category in order_list:
+    for category in categories_top_5:
         list_categories_top_5.append(category["category"])
 
     del(list_categories_top_5[5:])
@@ -58,13 +58,3 @@ def multisort(xs, specs):
     for key, reverse in reversed(specs):
         xs.sort(key=itemgetter(key), reverse=reverse)
     return xs
-
-
-if __name__ == "__main__":
-    top_5 = top_5_news()
-    for new in top_5:
-        print(new)
-    # result = top_5_categories()
-    # print(result)
-    # for category in result:
-    #     print(category)

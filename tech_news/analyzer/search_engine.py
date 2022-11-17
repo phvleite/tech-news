@@ -1,5 +1,4 @@
 import datetime
-
 from tech_news.database import search_news
 
 
@@ -48,19 +47,3 @@ def search_by_category(category):
     for new in result:
         news_result.append((new["title"], new["url"]))
     return news_result
-
-
-if __name__ == "__main__":
-    # news = search_by_title("gates")
-    # for new in news:
-    #     print(new)
-    # news = search_by_date("2021-04-04")
-    # for new in news:
-    #     print(new)
-    # news = search_by_tag("tecnologia")
-    # for new in news:
-    #     print(new)
-    # news = search_by_category("ferramentas")
-    # for new in news:
-    #     print(new)
-    pass
